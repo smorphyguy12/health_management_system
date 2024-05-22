@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 27, 2024 at 02:40 AM
+-- Generation Time: May 22, 2024 at 07:32 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -44,20 +44,8 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`id`, `profile`, `full_name`, `email`, `user_name`, `password`, `role`, `reset_token_expires_at`, `reset_token_hash`) VALUES
-(1, NULL, 'Admin HMS', 'supp0rt.healthsys@outlook.com', 'admin', '$2y$10$gW3GbxTzRMHOKe6aBnWCKOwQoaE.wkxgtg8uoaTbdWvaMIRFnqImK', 'admin', NULL, NULL);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `allergies`
---
-
-CREATE TABLE `allergies` (
-  `allergy_id` int NOT NULL,
-  `student_id` int DEFAULT NULL,
-  `allergen_type` varchar(255) DEFAULT NULL,
-  `reaction_severity` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+(1, '../uploads/giphy.gif', 'Admin HMS', 'supp0rt.queuingsys@outlook.com', 'admin', '$2y$10$YsFPDflEbd.jbPl2flAEtuOQBsSq2a/lOngE3uMcOHkRbJz7CIpx2', 'admin', '2024-05-22 19:53:39', 'e5dfc804d5f4bccea95c06d77435d80a72f85a893d08a7d635cc561c2315b219'),
+(4, '../uploads/IMG_20220802_222359.jpg', 'Mark Steven B. Peligro', 'markpeligro1234@gmail.com', 'Mark Steven', '$2y$10$JkXid.0sCgZeFfT9JnZ60eUUX343/IT.I7QJLRKLxOpv1zl92EHA.', 'staff', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -85,46 +73,24 @@ INSERT INTO `course` (`id`, `course`, `acronym`, `date_created`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `health_conditions`
+-- Table structure for table `emergency_contact_information`
 --
 
-CREATE TABLE `health_conditions` (
-  `condition_id` int NOT NULL,
-  `student_id` int DEFAULT NULL,
-  `diagnosis` varchar(255) DEFAULT NULL,
-  `treatment_plan` varchar(255) DEFAULT NULL,
-  `current_status` varchar(50) DEFAULT NULL
+CREATE TABLE `emergency_contact_information` (
+  `emergency_id` int NOT NULL,
+  `student_id` varchar(255) DEFAULT NULL,
+  `parent_guardian` varchar(255) DEFAULT NULL,
+  `relationship` varchar(255) DEFAULT NULL,
+  `phone_number` varchar(255) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- --------------------------------------------------------
-
 --
--- Table structure for table `immunization_records`
+-- Dumping data for table `emergency_contact_information`
 --
 
-CREATE TABLE `immunization_records` (
-  `immunization_id` int NOT NULL,
-  `student_id` int DEFAULT NULL,
-  `vaccination_type` varchar(255) DEFAULT NULL,
-  `date_administered` date DEFAULT NULL,
-  `next_due_date` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `medical_history`
---
-
-CREATE TABLE `medical_history` (
-  `history_id` int NOT NULL,
-  `student_id` int DEFAULT NULL,
-  `doctor_name` varchar(255) DEFAULT NULL,
-  `date_last_visit` date DEFAULT NULL,
-  `medical_conditions` varchar(255) DEFAULT NULL,
-  `surgeries` varchar(255) DEFAULT NULL,
-  `medications` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+INSERT INTO `emergency_contact_information` (`emergency_id`, `student_id`, `parent_guardian`, `relationship`, `phone_number`, `address`) VALUES
+(9, '123456-1', 'ss', 'ada', '934834', 'Paku, Bontoc, So. Leyte');
 
 -- --------------------------------------------------------
 
@@ -133,16 +99,51 @@ CREATE TABLE `medical_history` (
 --
 
 CREATE TABLE `students` (
-  `student_id` int NOT NULL,
-  `profile_stud` varchar(255) DEFAULT NULL,
-  `first_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `middle_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `last_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `id` int NOT NULL,
+  `student_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `profile_stud` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `full_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `date_of_birth` date DEFAULT NULL,
-  `gender` varchar(10) DEFAULT NULL,
-  `course` varchar(255) DEFAULT NULL,
+  `gender` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `course` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `contact_information` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `students`
+--
+
+INSERT INTO `students` (`id`, `student_id`, `profile_stud`, `full_name`, `date_of_birth`, `gender`, `course`, `contact_information`) VALUES
+(1, '2210169-2', '386445499_1020770055880690_8571224337334924637_n.jpg', 'Mark Steven B. Peligro', '2004-03-23', 'Male', 'Bachelor of Science in Information Technology', '09069225742'),
+(3, '2210220-2', NULL, 'Jerrel Angel Padalapat', '2004-03-23', 'Female', 'Bachelor of Science in Information Technology', '099378283'),
+(4, '123456-1', '421820647_2072185943151183_3662517506173831545_n.jpg', 'jawdaj', '2004-03-23', 'Male', 'Bachelor of Science in Information Technology', '09069225742'),
+(5, 'test', 'Padalapat.png', 'test', '2004-03-23', 'Male', 'Bachelor of Science in Information Technology', '0903283'),
+(6, 'adaw', '421820647_2072185943151183_3662517506173831545_n.jpg', 'wadaw', '2004-03-23', 'Male', 'Bachelor of Science in Information Technology', '099494');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `student_health_information`
+--
+
+CREATE TABLE `student_health_information` (
+  `student_health_id` int NOT NULL,
+  `student_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `allergies` varchar(255) DEFAULT NULL,
+  `medications` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `medical_conditions` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `immunization_record` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `height` int DEFAULT NULL,
+  `weight` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `blood_type` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `student_health_information`
+--
+
+INSERT INTO `student_health_information` (`student_health_id`, `student_id`, `allergies`, `medications`, `medical_conditions`, `immunization_record`, `height`, `weight`, `blood_type`) VALUES
+(31, '123456-1', 'dwad1xawd', 'wawdwa', 'wada', 'wada2', 12, '53', 'dwad');
 
 --
 -- Indexes for dumped tables
@@ -155,44 +156,28 @@ ALTER TABLE `admin`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `allergies`
---
-ALTER TABLE `allergies`
-  ADD PRIMARY KEY (`allergy_id`),
-  ADD KEY `student_id` (`student_id`);
-
---
 -- Indexes for table `course`
 --
 ALTER TABLE `course`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `health_conditions`
+-- Indexes for table `emergency_contact_information`
 --
-ALTER TABLE `health_conditions`
-  ADD PRIMARY KEY (`condition_id`),
-  ADD KEY `student_id` (`student_id`);
-
---
--- Indexes for table `immunization_records`
---
-ALTER TABLE `immunization_records`
-  ADD PRIMARY KEY (`immunization_id`),
-  ADD KEY `student_id` (`student_id`);
-
---
--- Indexes for table `medical_history`
---
-ALTER TABLE `medical_history`
-  ADD PRIMARY KEY (`history_id`),
-  ADD KEY `student_id` (`student_id`);
+ALTER TABLE `emergency_contact_information`
+  ADD PRIMARY KEY (`emergency_id`);
 
 --
 -- Indexes for table `students`
 --
 ALTER TABLE `students`
-  ADD PRIMARY KEY (`student_id`);
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `student_health_information`
+--
+ALTER TABLE `student_health_information`
+  ADD PRIMARY KEY (`student_health_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -202,71 +187,31 @@ ALTER TABLE `students`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `allergies`
---
-ALTER TABLE `allergies`
-  MODIFY `allergy_id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `course`
 --
 ALTER TABLE `course`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT for table `health_conditions`
+-- AUTO_INCREMENT for table `emergency_contact_information`
 --
-ALTER TABLE `health_conditions`
-  MODIFY `condition_id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `immunization_records`
---
-ALTER TABLE `immunization_records`
-  MODIFY `immunization_id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `medical_history`
---
-ALTER TABLE `medical_history`
-  MODIFY `history_id` int NOT NULL AUTO_INCREMENT;
+ALTER TABLE `emergency_contact_information`
+  MODIFY `emergency_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `student_id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- Constraints for dumped tables
+-- AUTO_INCREMENT for table `student_health_information`
 --
-
---
--- Constraints for table `allergies`
---
-ALTER TABLE `allergies`
-  ADD CONSTRAINT `allergies_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`);
-
---
--- Constraints for table `health_conditions`
---
-ALTER TABLE `health_conditions`
-  ADD CONSTRAINT `health_conditions_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`);
-
---
--- Constraints for table `immunization_records`
---
-ALTER TABLE `immunization_records`
-  ADD CONSTRAINT `immunization_records_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`);
-
---
--- Constraints for table `medical_history`
---
-ALTER TABLE `medical_history`
-  ADD CONSTRAINT `medical_history_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`);
+ALTER TABLE `student_health_information`
+  MODIFY `student_health_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
