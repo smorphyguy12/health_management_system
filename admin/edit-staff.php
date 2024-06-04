@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_name'])) {
 }
 
 $user_name = $_SESSION['user_name'];
-$img = $_SESSION['profile'] ?? '';  // Check if profile image is set
+$img = $_SESSION['profile'];
 $full_name = $_SESSION['full_name'];
 
 $message = '';
@@ -17,14 +17,11 @@ if (isset($_GET['id'])) {
     $id = filter_var($_GET['id'], FILTER_SANITIZE_NUMBER_INT);
 
     $stmt = $conn->prepare("SELECT * FROM admin WHERE id = ?");
-    if ($stmt) {
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $rows = $stmt->get_result()->fetch_assoc();
-        $stmt->close();
-    } else {
-        $message = "<div class='alert alert-danger' role='alert'>Failed to prepare statement.</div>";
-    }
+
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $rows = $stmt->get_result()->fetch_assoc();
+    $stmt->close();
 }
 
 if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['id'])) {
@@ -32,37 +29,36 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['id'])) {
     $username = filter_var($_POST['username'], FILTER_SANITIZE_SPECIAL_CHARS);
     $fullname = filter_var($_POST['fullname'], FILTER_SANITIZE_SPECIAL_CHARS);
     $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-    
-    $stmt = $conn->prepare("SELECT * FROM admin WHERE (email = ? OR user_name = ? OR full_name = ?) AND id != ?");
-    if ($stmt) {
-        $stmt->bind_param("sssi", $email, $username, $fullname, $id);
-        $stmt->execute();
-        $result = $stmt->get_result();
 
-        if ($result->num_rows > 0) {
-            while ($existingUser = $result->fetch_assoc()) {
-                if ($existingUser['email'] === $email) {
-                    $message = "<div class='alert alert-warning' role='alert'>The email '$email' is already used. Please try again.</div>";
-                    break;
-                }
-                if ($existingUser['user_name'] === $username) {
-                    $message = "<div class='alert alert-warning' role='alert'>The username '$username' is already used. Please try again.</div>";
-                    break;
-                }
-                if ($existingUser['full_name'] === $fullname) {
-                    $message = "<div class='alert alert-warning' role='alert'>The fullname '$fullname' is already used. Please try again.</div>";
-                    break;
-                }
+    $stmt = $conn->prepare("SELECT * FROM admin WHERE (email = ? OR user_name = ? OR full_name = ?) AND id != ?");
+    $stmt->bind_param("sssi", $email, $username, $fullname, $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        while ($existingUser = $result->fetch_assoc()) {
+            if ($existingUser['email'] === $email) {
+                $message = "<div class='alert alert-warning' role='alert'>The email '$email' is already used. Please try again.</div>";
+                break;
             }
+            if ($existingUser['user_name'] === $username) {
+                $message = "<div class='alert alert-warning' role='alert'>The username '$username' is already used. Please try again.</div>";
+                break;
+            }
+            if ($existingUser['full_name'] === $fullname) {
+                $message = "<div class='alert alert-warning' role='alert'>The fullname '$fullname' is already used. Please try again.</div>";
+                break;
+            }
+        }
+    } else {
+        if (!empty($password)) {
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            $stmt = $conn->prepare("UPDATE admin SET full_name = ?, email = ?, password = ?, user_name = ? WHERE id = ?");
+            $stmt->bind_param("ssssi", $fullname, $email, $hashed_password, $username, $id);
         } else {
-            if (!empty($password)) {
-                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-                $stmt = $conn->prepare("UPDATE admin SET full_name = ?, email = ?, password = ?, user_name = ? WHERE id = ?");
-                $stmt->bind_param("ssssi", $fullname, $email, $hashed_password, $username, $id);
-            } else {
-                $stmt = $conn->prepare("UPDATE admin SET full_name = ?, email = ?, user_name = ? WHERE id = ?");
-                $stmt->bind_param("sssi", $fullname, $email, $username, $id);
-            }
+            $stmt = $conn->prepare("UPDATE admin SET full_name = ?, email = ?, user_name = ? WHERE id = ?");
+            $stmt->bind_param("sssi", $fullname, $email, $username, $id);
+
             $stmt->execute();
 
             if ($stmt->affected_rows > 0) {
@@ -76,8 +72,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['id'])) {
             }
             $stmt->close();
         }
-    } else {
-        $message = "<div class='alert alert-danger' role='alert'>Failed to prepare statement.</div>";
     }
 } else if (isset($_POST['change_pass_btn'])) {
     $password = $_POST['password'];
@@ -188,7 +182,7 @@ $conn->close();
                                                 <div class="col-sm-10">
                                                     <div class="input-group input-group-merge">
                                                         <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-key"></i></span>
-                                                        <input type="text" id="password" name="password" class="form-control"value="slsuhms2024" placeholder="Enter new password" aria-describedby="basic-icon-default-company2" />
+                                                        <input type="text" id="password" name="password" class="form-control" value="slsuhms2024" placeholder="Enter new password" aria-describedby="basic-icon-default-company2" />
                                                     </div>
                                                 </div>
                                             </div>

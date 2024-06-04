@@ -60,7 +60,7 @@
       <div class="misc-wrapper">
         <h2 class="mb-2 mx-2">Session Has Expired :(</h2>
         <p class="mb-4 mx-2">Oops! 😖 Please request a new password again.</p>
-        <a href="admin.php" class="btn btn-primary">Back to home</a>
+        <a href="index.php" class="btn btn-primary">Back to home</a>
         <div class="mt-3">
           <img
             src="./assets/img/illustrations/page-misc-error-light.png"

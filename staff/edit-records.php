@@ -38,6 +38,14 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $phone_number = filter_var($_POST['phone_number'], FILTER_SANITIZE_SPECIAL_CHARS);
     $address = filter_var($_POST['address'], FILTER_SANITIZE_SPECIAL_CHARS);
 
+    if (
+        empty($allergies) || empty($medications) || empty($medical_conditions) || empty($immunization_record) ||
+        empty($height) || empty($weight) || empty($blood_type) || empty($parent_guardian) || empty($relationship) ||
+        empty($phone_number) || empty($address)
+    ) {
+        $message = "<div class='alert alert-danger text-center' role='alert'>Please fill out all fields.</div>";
+    }
+
     $stmt = $conn->prepare("UPDATE student_health_information AS shi
                         INNER JOIN emergency_contact_information AS eci 
                         ON shi.student_id = eci.student_id
@@ -144,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                                             <h5 class="mb-0">Student Health Records</h5>
                                         </div>
                                         <div class="card-body">
-                                        <?php echo $message ?>
+                                            <?php echo $message ?>
                                             <div class="mb-3">
                                                 <label class="form-label" for="allergies">Allergies</label>
                                                 <input type="text" class="form-control" id="allergies" name="allergies" value="<?php echo $rows['allergies'] ?>" placeholder="Enter Allergies, if any (e.g., Peanuts, Shellfish)" />

@@ -12,7 +12,7 @@
     $mail->SMTPDebug = 0;
     $mail->SMTPAuth = true;
     $mail->Username = "supp0rt.queuingsys@outlook.com";
-    $mail->Password = "vtlbsohbpysrsusd";
+    $mail->Password = "uhnmgkwfibbxnjdl";
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port = 587;
 ?>

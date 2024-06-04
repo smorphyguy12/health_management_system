@@ -10,13 +10,29 @@ if (!isset($_SESSION['user_name'])) {
 $username = $_SESSION['user_name'];
 $img = $_SESSION['profile'];
 
+$studentCount = 0;
+$recordCount = 0;
+$courseCount = 0;
+
 $stmt = $conn->prepare("SELECT COUNT(*) AS studentCount FROM students");
 if ($stmt->execute()) {
   $result = $stmt->get_result();
   $rows = $result->fetch_assoc();
   $studentCount = $rows['studentCount'];
-} else {
-  $studentCount = 0;
+}
+
+$stmt = $conn->prepare("SELECT COUNT(*) AS recordCount FROM student_health_information");
+if ($stmt->execute()) {
+  $result = $stmt->get_result();
+  $rows = $result->fetch_assoc();
+  $recordCount = $rows['recordCount'];
+}
+
+$stmt = $conn->prepare("SELECT COUNT(*) AS courseCount FROM course");
+if ($stmt->execute()) {
+  $result = $stmt->get_result();
+  $rows = $result->fetch_assoc();
+  $courseCount = $rows['courseCount'];
 }
 $stmt->close();
 ?>
@@ -61,6 +77,19 @@ $stmt->close();
   <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
   <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
   <script src="../assets/js/config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .chart-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      background-color: #fff;
+    }
+  </style>
 </head>
 
 <body>
@@ -97,26 +126,14 @@ $stmt->close();
                   </div>
                 </div>
               </div>
-              <div class="col-lg-4 col-md-4 order-2">
-                <div class="row">
-                  <div class="col-lg-6 col-md-12 col-6 mb-4">
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="card-title d-flex align-items-start justify-content-between">
-                          <div class="avatar flex-shrink-0">
-                            <img src="../assets/img/icons/student.png">
-                          </div>
-                        </div>
-                        <span class="fw-semibold d-block mb-2">Student Registered</span>
-                        <h3 class="card-title mb-2"><?php echo $studentCount ?></h3>
-                      </div>
-                    </div>
-                  </div>
+              <div class="text-center">
+                <div class="chart-container">
+                  <canvas id="pieChart"></canvas>
                 </div>
               </div>
             </div>
           </div>
-          
+
 
           <!-- / Content -->
 
@@ -131,6 +148,36 @@ $stmt->close();
   <!-- Overlay -->
   <div class="layout-overlay layout-menu-toggle"></div>
   </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const ctxPie = document.getElementById('pieChart').getContext('2d');
+      const pieChart = new Chart(ctxPie, {
+        type: 'pie',
+        data: {
+          labels: ['Students', 'Health Records', 'Course'],
+          datasets: [{
+            label: 'Counts',
+            data: [<?php echo $studentCount ?>, <?php echo $recordCount ?>, <?php echo $courseCount ?>],
+            backgroundColor: [
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+        }
+      });
+    });
+  </script>
   <!-- / Layout wrapper -->
   <!-- Core JS -->
   <!-- build:js assets/vendor/js/core.js -->
